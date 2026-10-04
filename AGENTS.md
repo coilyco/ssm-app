@@ -15,7 +15,7 @@ A native macOS app for AWS SSM Parameter Store: list, read, write, rotate, and d
 - `Sources/SsmCore` - the aws CLI wrapper, name and secret rules, and the optional descriptions overlay parser. No UI, so the checks can drive it.
 - `Sources/SsmApp` - the SwiftUI app and its model. `SSM_APP_DRIVE=1` runs the model flows headless against whatever aws it is pointed at.
 - `Sources/SsmCheck` - the check executable and the fake aws every check runs against. Nothing in this repo reaches AWS.
-- `scripts/` - `package.sh` zips a release build, `render-cask.sh` renders the cask for one version.
+- `scripts/` - `package.sh` zips a release build, `release.sh` cuts a release by hand, `render-cask.sh` and `tap-cask.sh` render and propose the cask.
 - [docs/release.md](docs/release.md) - how it installs, how a release is cut, and the signing caveat.
 
 ## Repo boundaries
@@ -24,7 +24,7 @@ Public on Forgejo and its GitHub mirror, so no parameter name, account id, host,
 
 ## Commands
 
-Route dev commands through the [`justfile`](justfile). Bare `just` lists every verb: `build`, `check`, `package`, `ci`. Add a verb there before invoking it.
+Route dev commands through the [`justfile`](justfile). Bare `just` lists every verb: `build`, `check`, `package`, `release`, `tap-cask`, `ci`. Add a verb there before invoking it.
 
 ## Validation
 

@@ -13,9 +13,13 @@ How `SSM.app` reaches a Mac, and what is still open.
 
 ## Cutting a release
 
-`scripts/package.sh` builds with `VERSION` set and writes the zip and its sha256. `scripts/render-cask.sh` renders the cask for that version and checksum. Both need macOS, because AppKit does not build on the Linux Forgejo runners.
+A release is cut by hand on a Mac, because no Forgejo runner carries a macOS label and AppKit does not build on the Linux ones. Kai chose this over a macOS runner or GitHub Actions.
 
-The release train that runs them on a push is not wired yet, because no Forgejo runner carries a macOS label. Until one does, a release is cut by hand on a Mac, which is the gap this page tracks.
+1. From a clean checkout at `origin/main`, run `just release x.y.z`. It builds and zips the app, creates the Forgejo release `vx.y.z` at that commit, uploads the zip and its sha256, and reads the zip back through its public URL to compare the checksum. `--dry-run` stops after the build.
+2. The fleet mirror copies the release assets to GitHub, which is where the cask points.
+3. Run `just tap-cask x.y.z` to open the `homebrew-tap` pull request that points `Casks/ssm.rb` at the release, then merge it.
+
+A mirrored asset is never overwritten, so the release verb refuses a tag that already has a release. Cut a new version instead of redoing one.
 
 ## Descriptions
 
