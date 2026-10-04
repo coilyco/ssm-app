@@ -9,11 +9,12 @@ tag="v${version}"
 asset="SSM-${version}-arm64.zip"
 
 fail() { echo "tap-cask: $*" >&2; exit 1; }
+forgejo() { aosguard ops forgejo "$@"; }
 
-id="$(aosguard ops forgejo release list coilyco ssm-app --limit 50 | jq -r --arg t "$tag" '.[] | select(.tag_name == $t) | .id')"
-[ -n "$id" ] || fail "$tag has no release, run release.sh first"
-url="$(aosguard ops forgejo release get coilyco ssm-app "$id" | jq -r --arg n "$asset.sha256" '.assets[] | select(.name == $n) | .browser_download_url')"
-[ -n "$url" ] || fail "the release has no $asset.sha256"
+id="$(forgejo release list coilyco ssm-app --limit 50 --query "[?tag_name=='$tag'].id | [0]")"
+[ "$id" != null ] || fail "$tag has no release, run release.sh first"
+url="$(forgejo release get coilyco ssm-app "$id" --query "assets[?name=='$asset.sha256'].browser_download_url | [0]")"
+[ "$url" != null ] || fail "the release has no $asset.sha256"
 sum="$(curl -fsSL --max-time 60 "$url" | cut -d' ' -f1)"
 [[ "$sum" =~ ^[0-9a-f]{64}$ ]] || fail "unexpected checksum '$sum'"
 
@@ -27,6 +28,6 @@ bash "$root/scripts/render-cask.sh" "$version" "$sum" "$work/tap/Casks/ssm.rb"
 git -C "$work/tap" add Casks/ssm.rb
 git -C "$work/tap" commit -q -m "feat(ssm): point the ssm cask at ssm-app ${tag}"
 git -C "$work/tap" push -q origin "$branch"
-aosguard ops forgejo pr create coilyco homebrew-tap --head "$branch" --base main \
+forgejo pr create coilyco homebrew-tap --head "$branch" --base main \
   --title "feat(ssm): point the ssm cask at ssm-app ${tag}" \
   --body "Casks/ssm.rb for ssm-app ${tag}, checksum ${sum}, rendered by ssm-app scripts/render-cask.sh."

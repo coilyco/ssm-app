@@ -19,7 +19,7 @@ A release is cut by hand on a Mac, because no Forgejo runner carries a macOS lab
 2. The fleet mirror copies the release assets to GitHub, which is where the cask points.
 3. Run `just tap-cask x.y.z` to open the `homebrew-tap` pull request that points `Casks/ssm.rb` at the release, then merge it.
 
-A mirrored asset is never overwritten, so the release verb refuses a tag that already has a release. Cut a new version instead of redoing one.
+A mirrored asset is never overwritten, so the verb refuses a tag whose release already has assets. A release left with none by an interrupted run, at the same commit, is finished instead. Cut a new version to redo one.
 
 ## Descriptions
 
