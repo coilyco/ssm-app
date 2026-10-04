@@ -1,0 +1,21 @@
+[project]
+name = "ssm-app"
+version = "0.1.0"
+description = "Native macOS app for AWS SSM Parameter Store."
+requires-python = ">=3.11"
+
+# Per-repo opt-outs for the managed agentic-os pre-commit suite.
+# Tree-walking hooks bypass pre-commit's exclude:, so opt-outs live here.
+
+[tool.agentic-os.documentation-layout]
+band = "small"
+
+[tool.agentic-os.code-comments]
+excludes = [
+  # The managed-hook block markers are stamped + required by
+  # agentic-os/scripts/apply-agentic-os-hooks.py, so they can't move to line 1.
+  ".pre-commit-config.yaml",
+]
+
+[tool.agentic-os.repo-pointer-skills]
+org = "coilyco"
