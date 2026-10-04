@@ -11,8 +11,10 @@ swift build -c release --package-path "$here" --product SsmApp
 bin="$(swift build -c release --package-path "$here" --show-bin-path)/SsmApp"
 
 rm -rf "$app"
-mkdir -p "$app/Contents/MacOS"
+mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
 cp "$bin" "$app/Contents/MacOS/SSM"
+# A committed .icns, since SwiftPM under Command Line Tools cannot build an asset catalog.
+cp "$here/Resources/AppIcon.icns" "$app/Contents/Resources/AppIcon.icns"
 cat > "$app/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -22,6 +24,7 @@ cat > "$app/Contents/Info.plist" <<PLIST
     <key>CFBundleDisplayName</key><string>SSM</string>
     <key>CFBundleIdentifier</key><string>me.coilysiren.ssm</string>
     <key>CFBundleExecutable</key><string>SSM</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>${version}</string>
     <key>CFBundleVersion</key><string>${version}</string>

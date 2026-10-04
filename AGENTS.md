@@ -15,6 +15,7 @@ A native macOS app for AWS SSM Parameter Store: list, read, write, rotate, and d
 - `Sources/SsmCore` - the aws CLI wrapper, name and secret rules, and the optional descriptions overlay parser. No UI, so the checks can drive it.
 - `Sources/SsmApp` - the SwiftUI app and its model. `SSM_APP_DRIVE=1` runs the model flows headless against whatever aws it is pointed at.
 - `Sources/SsmCheck` - the check executable and the fake aws every check runs against. Nothing in this repo reaches AWS.
+- `Resources/AppIcon.icns` - the committed app icon, drawn by `scripts/make-icon.sh`. Swap the file to change the artwork, and the build copies it into the bundle.
 - `scripts/` - `package.sh` zips a release build, `release.sh` cuts a release by hand, `render-cask.sh` and `tap-cask.sh` render and propose the cask.
 - [docs/release.md](docs/release.md) - how it installs, how a release is cut, and the signing caveat.
 
