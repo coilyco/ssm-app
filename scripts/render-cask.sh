@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Render the cask for one release. Usage: render-cask.sh <version> <sha256> <out>
-# The url names GitHub, where the mirror copies release assets. See docs/release.md.
+# The url names GitHub, where the mirror copies release assets.
 set -euo pipefail
 
 version="${1:?version}"
@@ -22,7 +22,7 @@ cask "ssm" do
 
   app "SSM.app"
 
-  # Ad-hoc signed and not notarized, so clear quarantine. See the ssm-app docs/release.md.
+  # Ad-hoc signed and not notarized, so Gatekeeper needs the quarantine flag cleared.
   postflight_steps do
     run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/SSM.app"]
   end
