@@ -15,12 +15,16 @@ concurrency:
 
 jobs:
   pre-commit:
-    runs-on: docker
-    container: forgejo.coilysiren.me/coilyco/agentic-os:release
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - uses: coilyco/agentic-os/actions/setup-ci@0dc318a369ff34254a7187b5b1b85ff9b6580750
+        with:
+          tools: just uv pre-commit trufflehog
 
       - name: Run the pre-commit suite
         run: just ci
