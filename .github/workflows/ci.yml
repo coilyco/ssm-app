@@ -28,3 +28,12 @@ jobs:
 
       - name: Run the pre-commit suite
         run: just ci
+
+  gate:
+    name: gate
+    needs: [pre-commit]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
